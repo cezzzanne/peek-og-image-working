@@ -27,24 +27,44 @@ const formatTextWithAppleEmojis = (text: string, size: number = 32) => {
 
 // --- 2. Helper: Height Estimation ---
 // This estimates how many pixels tall a block of text will be
-const estimateTextHeight = (
+function estimateTextHeight(
   text: string, 
   fontSize: number, 
   lineHeight: number, 
-  containerWidth: number,
+  maxWidth: number, 
   fontWeight: 'normal' | 'bold' = 'normal'
-) => {
+) {
   if (!text) return 0;
 
-  // Average pixels per character (heuristic)
-  // Bold fonts are wider (~0.6x size), Normal are narrower (~0.5x size)
-  const charWidth = fontSize * (fontWeight === 'bold' ? 0.6 : 0.5);
+  // 1. Approximate average character width
+  // 'Inter' and 'SF Pro' are roughly 0.5x width of height. Bold is wider.
+  const avgCharWidth = fontWeight === 'bold' ? fontSize * 0.6 : fontSize * 0.5;
   
-  const charsPerLine = Math.floor(containerWidth / charWidth);
-  const lines = Math.ceil(text.length / charsPerLine);
-  
-  // Return lines * line-height-pixels
-  return lines * (fontSize * lineHeight);
+  // 2. Calculate how many characters fit on one line
+  const maxCharsPerLine = Math.floor(maxWidth / avgCharWidth);
+
+  const words = text.split(' ');
+  let lineCount = 1;
+  let currentLineChars = 0;
+
+  for (const word of words) {
+    // If adding this word exceeds the line length...
+    if (currentLineChars + word.length > maxCharsPerLine) {
+      lineCount++; // Start a new line
+      currentLineChars = word.length; // Reset count to this word
+    } else {
+      // Add word length + 1 for the space
+      currentLineChars += word.length + 1;
+    }
+  }
+
+  // 3. Return total height
+  return Math.ceil(lineCount * fontSize * lineHeight);
+}
+
+const addHash = (color: string | null, fallback: string) => {
+  if (!color) return fallback;
+  return color.startsWith('#') ? color : `#${color}`;
 };
 
 // ... imports and helper functions (formatTextWithAppleEmojis, estimateTextHeight) remain the same ...
@@ -60,10 +80,10 @@ export async function GET(request: Request) {
   const userAvatar = searchParams.get('avatar') || ''; // Handle empty avatar logic in JSX
   
   // Extract Colors
-  const bg = searchParams.get('bg') || '#1a1a1a';
-  const cardBg = searchParams.get('cardBg') || '#2563EB';
-  const lighterCard = searchParams.get('lighterCard') || 'rgba(255, 255, 255, 0.1)';
-  
+  const bg = addHash(searchParams.get('bg'), '#1a1a1a');
+  const cardBg = addHash(searchParams.get('cardBg'), '#2563EB');
+  const lighterCard = addHash(searchParams.get('lighterCard'), 'rgba(255, 255, 255, 0.1)');
+
   // Extract Meta Stats
   const statTime = searchParams.get('sTime') || '';
   const statWeather = searchParams.get('sWeather') || '';
@@ -88,9 +108,9 @@ export async function GET(request: Request) {
   const USABLE_WIDTH = CARD_WIDTH - PADDING;
   const STATIC_HEIGHT = 200; 
 
-  const titleHeight = estimateTextHeight(title, 24, 1.3, USABLE_WIDTH * 0.75, 'bold');
-  const descHeight = estimateTextHeight(longDescription, 18, 1.5, USABLE_WIDTH, 'normal');
-  const dynamicHeight = Math.round(STATIC_HEIGHT + titleHeight + descHeight + 20);
+  const titleHeight = estimateTextHeight(title, 24, 1.3, USABLE_WIDTH - 32, 'bold');
+  const descHeight = estimateTextHeight(longDescription, 18, 1.5, USABLE_WIDTH - 32, 'normal');
+  const dynamicHeight = Math.round(STATIC_HEIGHT + titleHeight + descHeight);
 
   return new ImageResponse(
     (
