@@ -110,7 +110,7 @@ export async function GET(request: Request) {
 
   const titleHeight = estimateTextHeight(title, 24, 1.3, USABLE_WIDTH - 32, 'bold');
   const descHeight = estimateTextHeight(longDescription, 18, 1.5, USABLE_WIDTH - 32, 'normal');
-  const dynamicHeight = Math.round(STATIC_HEIGHT + titleHeight + descHeight);
+  const dynamicHeight = Math.round(STATIC_HEIGHT + titleHeight + descHeight) - 1;
 
   return new ImageResponse(
     (
@@ -142,29 +142,29 @@ export async function GET(request: Request) {
           }}>
             
             {/* Meta Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: 16, fontWeight: 600, color: 'rgba(255,255,255,0.9)' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>{formatTextWithAppleEmojis(statTime, 20)}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>{formatTextWithAppleEmojis(statWeather, 20)}</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: 16, fontWeight: 600, color: bg }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, color: bg }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: bg }}>{formatTextWithAppleEmojis(statTime, 20)}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: bg }}>{formatTextWithAppleEmojis(statWeather, 20)}</div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>{formatTextWithAppleEmojis(statBattery, 20)}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>{formatTextWithAppleEmojis(statLoc, 20)}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: bg }}>{formatTextWithAppleEmojis(statBattery, 20)}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: bg }}>{formatTextWithAppleEmojis(statLoc, 20)}</div>
               </div>
             </div>
 
             {/* Title Section */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div style={{ display: 'flex', fontSize: 24, fontWeight: 700, lineHeight: 1.3, maxWidth: '75%' }}>
+              <div style={{ display: 'flex', fontSize: 24, fontWeight: 700, lineHeight: 1.3, maxWidth: '75%', color: bg }}>
                 {title}
               </div>
-               <div style={{ display: 'flex', fontSize: 40, transform: 'rotate(-10deg)', gap: 4, textShadow: `1.5px 0 0 white, -1.5px 0 0 white, 0 1.5px 0 white, 0 -1.5px 0 white` }}>
+               <div style={{ display: 'flex', fontSize: 40, transform: 'rotate(-10deg)', color: bg, gap: 4, textShadow: `1.5px 0 0 white, -1.5px 0 0 white, 0 1.5px 0 white, 0 -1.5px 0 white` }}>
                 {formatTextWithAppleEmojis(emojis, 40)}
             </div>
             </div>
 
             {/* Body Text */}
-            <div style={{ display: 'flex', fontSize: 18, lineHeight: 1.5, opacity: 0.95 }}>
+            <div style={{ display: 'flex', fontSize: 18, lineHeight: 1.5, opacity: 0.95, color: bg }}>
               {longDescription}
             </div>
 
