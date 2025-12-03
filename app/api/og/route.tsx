@@ -93,6 +93,7 @@ export async function GET(request: Request) {
   // 'cardBg' is the Background Color of the whole image
   const textColor = addHash(searchParams.get('bg'), '#1a1a1a'); 
   const backgroundColor = addHash(searchParams.get('cardBg'), '#ffffff'); 
+  const lighterCard = addHash(searchParams.get('lighterCard'), '#ffffff'); 
 
   // Meta Stats
   const statTime = searchParams.get('sTime') || '';
@@ -214,7 +215,7 @@ export async function GET(request: Request) {
             display: 'flex',
             alignItems: 'center',
             gap: 10 * scale,
-            backgroundColor: backgroundColor,
+            backgroundColor: lighterCard,
             // padding: '12px 20px',
             paddingTop: 12 * scale,
             paddingBottom: 12 * scale,
@@ -231,13 +232,13 @@ export async function GET(request: Request) {
           </div>
 
           <div style={{ display: 'flex', gap: 10 * scale }}>
-            <div style={{ width: 48 * scale, height: 48 * scale, borderRadius: 24 * scale, backgroundColor: backgroundColor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ width: 48 * scale, height: 48 * scale, borderRadius: 24 * scale, backgroundColor: lighterCard, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 {formatTextWithAppleEmojis('🚗', 24 * scale)}
             </div>
-            <div style={{ width: 48 * scale, height: 48 * scale, borderRadius: 24 * scale, backgroundColor: backgroundColor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ width: 48 * scale, height: 48 * scale, borderRadius: 24 * scale, backgroundColor: lighterCard, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 {formatTextWithAppleEmojis('🏢', 24 * scale)}
             </div>
-            <div style={{ width: 48 * scale, height: 48. * scale, borderRadius: 24 * scale, backgroundColor: backgroundColor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ width: 48 * scale, height: 48. * scale, borderRadius: 24 * scale, backgroundColor: lighterCard, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 {formatTextWithAppleEmojis('👍', 24 * scale)}
             </div>
           </div>
