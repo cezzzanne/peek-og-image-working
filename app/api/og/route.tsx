@@ -36,7 +36,7 @@ export async function GET(request: Request) {
 
   // 1. Extract Query Params
   const title = searchParams.get('title') || 'Default Title';
-  const longDescription = searchParams.get('desc') || '';
+  const rawDesc =  searchParams.get('desc') || '';
   
   // Colors
   // 'bg' is now used as the Text Color (to keep contrast logic from previous version)
@@ -64,6 +64,25 @@ export async function GET(request: Request) {
   const width = 1200;
   const height = 630;
 
+    let descFontSize = 35;
+  let maxDescLength = 180;
+
+  if (rawDesc.length > 100) {
+    descFontSize = 31;
+    maxDescLength = 240;
+  }
+  if (rawDesc.length > 200) {
+    descFontSize = 27;
+    maxDescLength = 320;
+  }
+
+  const truncate = (str: string, n: number) => {
+  return (str.length > n) ? str.slice(0, n - 1) + '...' : str;
+};
+
+  const longDescription = truncate(rawDesc, maxDescLength);
+
+
   return new ImageResponse(
     (
       <div
@@ -72,7 +91,7 @@ export async function GET(request: Request) {
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between', // Pushes header up, footer down
+          justifyContent: 'space-around', // Pushes header up, footer down
           backgroundColor: backgroundColor,
           color: textColor,
           fontFamily: '"SF Pro Display", sans-serif',
@@ -97,21 +116,23 @@ export async function GET(request: Request) {
             </div>
 
             {/* Title & Emoji Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 20 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 0, marginTop: 10 }}>
               <div style={{ 
                 display: 'flex', 
-                fontSize: 72, 
+                fontSize: 64, // Larger title for 1200px image
                 fontWeight: 800, 
-                lineHeight: 1.05, 
-                maxWidth: '85%',
-                letterSpacing: '-0.03em',
+                lineHeight: 1.1, 
+                // maxWidth: '100%',
+                // maxHeight: '110px', // Limit title height
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
               }}>
                 {title}
               </div>
               <div style={{ 
                 display: 'flex', 
                 fontSize: 80, 
-                transform: 'rotate(-8deg)', 
+                transform: 'rotate(-12deg)', 
                 marginTop: 10,
                 // Optional: Add a subtle shadow to emojis to make them pop
                 filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1))'
@@ -125,23 +146,17 @@ export async function GET(request: Request) {
           {/* flexGrow: 1 ensures this fills the empty space in the middle */}
           <div style={{ 
             display: 'flex', 
-            fontSize: 36, 
+            fontSize: descFontSize, // Uses the calculated size
             lineHeight: 1.4, 
-            opacity: 0.85, 
-            flexGrow: 1, 
-            alignItems: 'center', // Vertically center the text in the available space
-            paddingTop: 20,
-            paddingBottom: 20,
+            opacity: 0.95,
+            flexGrow: 1, // Takes up remaining space
+            overflow: 'hidden', // Hides anything that still overflows
+            alignItems: 'center'
           }}>
             {longDescription}
-          </div>
+        </div>
 
-          {/* Footer Section */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: `2px solid ${textColor}`, opacity: 0.3, paddingTop: 24 }}>
-             {/* Example Footer Content */}
-             <div style={{ fontSize: 24, fontWeight: 600 }}>peekapp.live</div>
-             <div style={{ fontSize: 24 }}>Your friends lives, narrated.</div>
-          </div>
+          
       </div>
     ),
     {
