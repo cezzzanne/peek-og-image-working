@@ -2,11 +2,9 @@ import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
 
-// Helper to replace emoji characters with Apple Emoji images via CDN
+// --- 1. Helper: Emoji Replacement ---
 const formatTextWithAppleEmojis = (text: string, size: number = 32) => {
-  // Regex to find emojis
   const emojiRegex = /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g;
-  
   const parts = text.split(emojiRegex);
   
   return parts.map((part, index) => {
@@ -22,17 +20,35 @@ const formatTextWithAppleEmojis = (text: string, size: number = 32) => {
         />
       );
     }
-    // Filter out empty strings
     if (!part) return null;
-    // Wrap text in a div to ensure Satori handles it correctly within flex containers
     return <div key={index} style={{ display: 'flex' }}>{part}</div>;
   });
 };
 
-export async function GET() {
-  // 1. Load Fonts
-  // Ensure these files exist at these paths in your project
+// --- 2. Helper: Height Estimation ---
+// This estimates how many pixels tall a block of text will be
+const estimateTextHeight = (
+  text: string, 
+  fontSize: number, 
+  lineHeight: number, 
+  containerWidth: number,
+  fontWeight: 'normal' | 'bold' = 'normal'
+) => {
+  if (!text) return 0;
 
+  // Average pixels per character (heuristic)
+  // Bold fonts are wider (~0.6x size), Normal are narrower (~0.5x size)
+  const charWidth = fontSize * (fontWeight === 'bold' ? 0.6 : 0.5);
+  
+  const charsPerLine = Math.floor(containerWidth / charWidth);
+  const lines = Math.ceil(text.length / charsPerLine);
+  
+  // Return lines * line-height-pixels
+  return lines * (fontSize * lineHeight);
+};
+
+export async function GET() {
+  // Load Fonts
   const interBold = await fetch(
     new URL('https://cdn.jsdelivr.net/npm/@fontsource/nunito@5.0.13/files/nunito-latin-800-normal.woff', import.meta.url)
   ).then((res) => res.arrayBuffer());
@@ -48,7 +64,7 @@ export async function GET() {
     },
     timeAgo: "16m",
     title: "Attending campus event at University Commons with friends getting hot chocolate and tote bags",
-    longDescription: "Adam is driving home with Aranza, Robert, and Charlotte in an Evo car along King Edward Avenue. Christmas music plays as they look at the festive decorations.",
+    longDescription: "Gil is rela",
     colors: {
       bg: '#1a1a1a',
       cardBg: '#2563EB',
@@ -57,12 +73,44 @@ export async function GET() {
     }
   };
 
+  // --- 3. Calculate Dynamic Height ---
+  const CARD_WIDTH = 500;
+  const PADDING = 64; // 32px left + 32px right
+  const USABLE_WIDTH = CARD_WIDTH - PADDING;
+
+  // A. Static Vertical Elements (Padding, Gaps, Meta Row, Footer)
+  // Top Padding (32) + Meta Row (~24) + Gap (24) + Gap (24) + Footer (~50) + Bottom Padding (32)
+  const STATIC_HEIGHT = 200; 
+
+  // B. Title Height
+  // Title is 24px font, 1.3 line height. Max width is 75% of usable width.
+  const titleHeight = estimateTextHeight(
+    data.title, 
+    24, // font size
+    1.3, // line height
+    USABLE_WIDTH * 0.75, // width constraint
+    'bold'
+  );
+
+  // C. Description Height
+  // Desc is 18px font, 1.5 line height. Full usable width.
+  const descHeight = estimateTextHeight(
+    data.longDescription, 
+    18, 
+    1.5, 
+    USABLE_WIDTH, 
+    'normal'
+  );
+
+  // Total Height + a small buffer (20px) to be safe
+  const dynamicHeight = Math.round(STATIC_HEIGHT + titleHeight + descHeight + 20);
+
   return new ImageResponse(
     (
       <div
         style={{
           height: '100%',
-          width: '100%',
+          width: '100%', // Ensure wrapper fills the calculated canvas
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -73,71 +121,30 @@ export async function GET() {
           overflow: 'hidden',
         }}
       >
-        {/* --- Layer 1: Emoji Splash Background --- 
-            Added display: flex to the container and absolute divs to satisfy Satori 
-        */}
-        <div style={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.3 }}>
-           <div style={{ display: 'flex', position: 'absolute', top: '5%', left: '10%', transform: 'rotate(-15deg)' }}>{formatTextWithAppleEmojis('🏠', 60)}</div>
-           <div style={{ display: 'flex', position: 'absolute', top: '15%', left: '80%', transform: 'rotate(20deg)' }}>{formatTextWithAppleEmojis('🚗', 60)}</div>
-           <div style={{ display: 'flex', position: 'absolute', top: '25%', left: '30%', transform: 'rotate(45deg)' }}>{formatTextWithAppleEmojis('🏠', 60)}</div>
-           <div style={{ display: 'flex', position: 'absolute', top: '10%', left: '50%', transform: 'rotate(-10deg)' }}>{formatTextWithAppleEmojis('🚗', 60)}</div>
-           <div style={{ display: 'flex', position: 'absolute', top: '60%', left: '10%', transform: 'rotate(15deg)' }}>{formatTextWithAppleEmojis('🚗', 60)}</div>
-           <div style={{ display: 'flex', position: 'absolute', top: '35%', left: '60%', transform: 'rotate(-30deg)' }}>{formatTextWithAppleEmojis('🏠', 60)}</div>
-           <div style={{ display: 'flex', position: 'absolute', top: '55%', left: '85%', transform: 'rotate(10deg)' }}>{formatTextWithAppleEmojis('🏠', 60)}</div>
-           <div style={{ display: 'flex', position: 'absolute', top: '80%', left: '20%', transform: 'rotate(-20deg)' }}>{formatTextWithAppleEmojis('🚗', 60)}</div>
-           <div style={{ display: 'flex', position: 'absolute', top: '75%', left: '50%', transform: 'rotate(30deg)' }}>{formatTextWithAppleEmojis('🏠', 60)}</div>
-           <div style={{ display: 'flex', position: 'absolute', top: '85%', left: '90%', transform: 'rotate(-5deg)' }}>{formatTextWithAppleEmojis('🏠', 60)}</div>
-        </div>
-
-        {/* Overlay */}
-        <div style={{
-          display: 'flex',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'rgba(0,0,0,0.3)',
-        }} />
-
-        {/* --- Layer 2: Main Content --- */}
+        {/* Main Content */}
         <div style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          width: '500px', 
+          width: `${CARD_WIDTH}px`, // Fixed width
           zIndex: 10,
           gap: 20,
         }}>
           
-          {/* User Header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 0, alignSelf: 'baseline', marginLeft: 14 }}>
-            <img 
-            src={data.user.avatar} 
-            width="40" 
-            height="40" 
-            style={{ 
-                borderRadius: '50%', // Better practice than '20' for circles
-                border: '2px solid rgba(255,255,255,0.2)',
-                objectFit: 'cover' 
-            }} 
-            />
-            <div style={{ display: 'flex', color: 'white', fontWeight: 700, fontSize: 18 }}>{data.user.name}</div>
-            <div style={{ display: 'flex', color: data.colors.textDim, fontSize: 14, marginTop: 4 }}>{data.timeAgo}</div>
-          </div>
-
           {/* The Blue Card */}
           <div style={{
             display: 'flex',
             flexDirection: 'column',
             backgroundColor: data.colors.cardBg,
-            borderRadius: 28,
+            borderRadius: '28px 28px 0 0',
             padding: 32,
             width: '100%',
             color: 'white',
             boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
             gap: 24,
+            // Ensure the card takes up the available height if needed
+            flexGrow: 1, 
           }}>
             
             {/* Meta Row */}
@@ -170,13 +177,7 @@ export async function GET() {
                 fontSize: 40, 
                 transform: 'rotate(-10deg)', 
                 gap: 4,
-                // This mimics your SwiftUI .shadow modifiers:
-                textShadow: `
-                1.5px 0 0 white, 
-                -1.5px 0 0 white, 
-                0 1.5px 0 white, 
-                0 -1.5px 0 white
-                `
+                textShadow: `1.5px 0 0 white, -1.5px 0 0 white, 0 1.5px 0 white, 0 -1.5px 0 white`
             }}>
                 {formatTextWithAppleEmojis('🚗 🏠', 40)}
             </div>
@@ -189,8 +190,6 @@ export async function GET() {
 
             {/* Footer Actions */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
-              
-              {/* Comment Button */}
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -207,7 +206,6 @@ export async function GET() {
                 <div style={{ display: 'flex' }}>Comment</div>
               </div>
 
-              {/* Reactions */}
               <div style={{ display: 'flex', gap: 10 }}>
                 <div style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: data.colors.lighterCard, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     {formatTextWithAppleEmojis('🚗', 24)}
@@ -226,19 +224,19 @@ export async function GET() {
       </div>
     ),
     {
-      width: 600,
-    //   height: 600,
+      width: 500,
+      height: dynamicHeight, // <--- Use the calculated height here
       fonts: interBold && interMedium ? [
         {
           name: 'SF Pro Display',
           data: interBold,
-          weight: 700, // Mapping Bold to 700
+          weight: 700,
           style: 'normal',
         },
         {
           name: 'SF Pro Display',
           data: interMedium,
-          weight: 400, // Mapping Medium/Regular to 400
+          weight: 400,
           style: 'normal',
         },
       ] : undefined,
