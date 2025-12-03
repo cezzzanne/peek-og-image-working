@@ -26,6 +26,56 @@ const formatTextWithAppleEmojis = (text: string, size: number = 32) => {
   });
 };
 
+const formatTextWithAppleEmojisOutlined = (text: string, size: number = 32, outlineSize: number = 8) => {
+  const emojiRegex = /((?:[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])[\uFE00-\uFE0F]?)/g;
+  
+  const parts = text.split(emojiRegex);
+
+  return parts.map((part, index) => {
+    if (part.match(emojiRegex)) {
+      const src = `https://emojicdn.elk.sh/${encodeURIComponent(part)}?style=apple`;
+      return (
+        <span
+          key={index}
+          style={{
+            position: 'relative',
+            // display: 'inline-block',
+            width: size,
+            height: size,
+            marginLeft: 2,
+            marginRight: 2,
+          }}
+        >
+          <img
+            src={src}
+            width={size}
+            height={size}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              filter: 'brightness(0) invert(1)',
+              transform: `scale(${1 + outlineSize / size * 2})`,
+            }}
+            alt=""
+          />
+          <img
+            src={src}
+            width={size}
+            height={size}
+            style={{
+              position: 'relative',
+            }}
+            alt={part}
+          />
+        </span>
+      );
+    }
+    if (!part) return null;
+    return <span key={index}>{part}</span>;
+  });
+};
+
 const addHash = (color: string | null, fallback: string) => {
   if (!color) return fallback;
   return color.startsWith('#') ? color : `#${color}`;
@@ -62,7 +112,7 @@ export async function GET(request: Request) {
 
   // Standard OG Dimensions
   const width = 600;
-  const height = 650;
+  const height = 660;
 
     let descFontSize = 35;
   let maxDescLength = 180;
@@ -123,7 +173,7 @@ export async function GET(request: Request) {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 0, marginTop: 40 }}>
               <div style={{ 
                 display: 'flex', 
-                fontSize: 34 * scale, // Larger title for 1200px image
+                fontSize: 32 * scale, // Larger title for 1200px image
                 fontWeight: 800, 
                 lineHeight: 1.1, 
                 // maxWidth: '100%',
@@ -137,11 +187,10 @@ export async function GET(request: Request) {
                 display: 'flex', 
                 fontSize: 30 * scale, 
                 transform: 'rotate(-12deg)', 
-                marginTop: 10,
-                // Optional: Add a subtle shadow to emojis to make them pop
-                filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1))'
+                marginTop: 10
+
               }}>
-                {formatTextWithAppleEmojis(emojis, 72 * scale)}
+                {formatTextWithAppleEmojisOutlined(emojis, 70 * scale)}
               </div>
             </div>
           </div>
@@ -158,6 +207,41 @@ export async function GET(request: Request) {
             alignItems: 'center'
           }}>
             {longDescription}
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10 * scale,
+            backgroundColor: backgroundColor,
+            // padding: '12px 20px',
+            paddingTop: 12 * scale,
+            paddingBottom: 12 * scale,
+            paddingLeft: 20 * scale,
+            paddingRight: 20 * scale,
+            borderRadius: 28 * scale,
+            fontSize: 26 * scale,
+            fontWeight: 700,
+          }}>
+            <svg width={20 * scale} height={20 * scale} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            <div style={{ display: 'flex' }}>Comment</div>
+          </div>
+
+          <div style={{ display: 'flex', gap: 10 * scale }}>
+            <div style={{ width: 48 * scale, height: 48 * scale, borderRadius: 24 * scale, backgroundColor: backgroundColor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {formatTextWithAppleEmojis('🚗', 24 * scale)}
+            </div>
+            <div style={{ width: 48 * scale, height: 48 * scale, borderRadius: 24 * scale, backgroundColor: backgroundColor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {formatTextWithAppleEmojis('🏢', 24 * scale)}
+            </div>
+            <div style={{ width: 48 * scale, height: 48. * scale, borderRadius: 24 * scale, backgroundColor: backgroundColor, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {formatTextWithAppleEmojis('👍', 24 * scale)}
+            </div>
+          </div>
+
         </div>
 
           
