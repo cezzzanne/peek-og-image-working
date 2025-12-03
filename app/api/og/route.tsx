@@ -119,11 +119,11 @@ export async function GET(request: Request) {
   let maxDescLength = 180;
 
   if (rawDesc.length > 100) {
-    descFontSize = 24;
+    descFontSize = 26;
     maxDescLength = 240;
   }
   if (rawDesc.length > 200) {
-    descFontSize = 15;
+    descFontSize = 26;
     maxDescLength = 320;
   }
 
