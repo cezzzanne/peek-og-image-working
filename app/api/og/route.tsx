@@ -127,6 +127,11 @@ export async function GET(request: Request) {
     maxDescLength = 320;
   }
 
+  if (rawDesc.length > 400) {
+    descFontSize = 17;
+    maxDescLength = 320;
+  }
+
   const truncate = (str: string, n: number) => {
   return (str.length > n) ? str.slice(0, n - 1) + '...' : str;
 };
