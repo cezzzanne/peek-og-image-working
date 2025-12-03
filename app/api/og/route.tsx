@@ -132,7 +132,7 @@ export async function GET(request: Request) {
 
   const longDescription = truncate(rawDesc, maxDescLength);
 
-  const scale = 2
+  const scale = 1
 
   return new ImageResponse(
     (
@@ -158,7 +158,7 @@ export async function GET(request: Request) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
             
             {/* Meta Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: 23 * scale, fontWeight: 600, opacity: 0.6, marginTop: -10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: 23 * scale, fontWeight: 600, opacity: 0.6, marginTop: 5 }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statTime, 17 * scale)}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statWeather, 17 * scale)}</div>
@@ -170,7 +170,7 @@ export async function GET(request: Request) {
             </div>
 
             {/* Title & Emoji Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 0, marginTop: 40 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 0, marginTop: 10 }}>
               <div style={{ 
                 display: 'flex', 
                 fontSize: 32 * scale, // Larger title for 1200px image
@@ -199,7 +199,7 @@ export async function GET(request: Request) {
           {/* flexGrow: 1 ensures this fills the empty space in the middle */}
           <div style={{ 
             display: 'flex', 
-            fontSize: 24 * scale, // Uses the calculated size
+            fontSize: 22 * scale, // Uses the calculated size
             lineHeight: 1.4, 
             opacity: 0.95,
             flexGrow: 1, // Takes up remaining space
