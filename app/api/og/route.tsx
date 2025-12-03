@@ -170,7 +170,7 @@ export async function GET(request: Request) {
             </div>
 
             {/* Title & Emoji Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 0, marginTop: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 20, marginTop: 10 }}>
               <div style={{ 
                 display: 'flex', 
                 fontSize: 32 * scale, // Larger title for 1200px image
@@ -190,7 +190,7 @@ export async function GET(request: Request) {
                 marginTop: 10
 
               }}>
-                {formatTextWithAppleEmojisOutlined(emojis, 70 * scale)}
+                {formatTextWithAppleEmojisOutlined(emojis, 60 * scale)}
               </div>
             </div>
           </div>
