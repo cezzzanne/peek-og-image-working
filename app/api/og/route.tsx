@@ -115,7 +115,7 @@ export async function GET(request: Request) {
   const width = 600;
   const height = 600;
 
-    let descFontSize = 23;
+    let descFontSize = 26;
   let maxDescLength = 180;
 
   if (rawDesc.length > 100) {
