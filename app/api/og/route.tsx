@@ -50,13 +50,13 @@ const formatTextWithAppleEmojisOutlined = (text: string, size: number = 32, outl
             src={src}
             width={size}
             height={size}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              filter: 'brightness(0) invert(1)',
-              transform: `scale(${1 + outlineSize / size * 2})`,
-            }}
+            // style={{
+            //   position: 'absolute',
+            //   top: 0,
+            //   left: 0,
+            //   filter: 'brightness(0) invert(1)',
+            //   transform: `scale(${1 + outlineSize / size * 2})`,
+            // }}
             alt=""
           />
           <img
@@ -113,17 +113,17 @@ export async function GET(request: Request) {
 
   // Standard OG Dimensions
   const width = 600;
-  const height = 660;
+  const height = 600;
 
-    let descFontSize = 35;
+    let descFontSize = 23;
   let maxDescLength = 180;
 
   if (rawDesc.length > 100) {
-    descFontSize = 31;
+    descFontSize = 19;
     maxDescLength = 240;
   }
   if (rawDesc.length > 200) {
-    descFontSize = 27;
+    descFontSize = 15;
     maxDescLength = 320;
   }
 
@@ -191,7 +191,7 @@ export async function GET(request: Request) {
                 marginTop: 10
 
               }}>
-                {formatTextWithAppleEmojisOutlined(emojis, 60 * scale)}
+                <p>{formatTextWithAppleEmojis(emojis, 57 * scale)}</p>
               </div>
             </div>
           </div>
@@ -200,7 +200,7 @@ export async function GET(request: Request) {
           {/* flexGrow: 1 ensures this fills the empty space in the middle */}
           <div style={{ 
             display: 'flex', 
-            fontSize: 22 * scale, // Uses the calculated size
+            fontSize: descFontSize * scale, // Uses the calculated size
             lineHeight: 1.4, 
             opacity: 0.95,
             flexGrow: 1, // Takes up remaining space
