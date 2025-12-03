@@ -61,8 +61,8 @@ export async function GET(request: Request) {
   ).then((res) => res.arrayBuffer());
 
   // Standard OG Dimensions
-  const width = 1200;
-  const height = 630;
+  const width = 600;
+  const height = 650;
 
     let descFontSize = 35;
   let maxDescLength = 180;
@@ -82,6 +82,7 @@ export async function GET(request: Request) {
 
   const longDescription = truncate(rawDesc, maxDescLength);
 
+  const scale = 2
 
   return new ImageResponse(
     (
@@ -96,7 +97,10 @@ export async function GET(request: Request) {
           color: textColor,
           fontFamily: '"SF Pro Display", sans-serif',
           // Internal padding so text doesn't hit the edge
-          padding: '60px 80px', 
+          paddingTop: 30 * scale,
+          paddingLeft: 40 * scale,
+          paddingRight: 40 * scale,
+          paddingBottom: 30 * scale,
           overflow: 'hidden',
         }}
       >
@@ -104,14 +108,14 @@ export async function GET(request: Request) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
             
             {/* Meta Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: 29, fontWeight: 600, opacity: 0.6, marginTop: -10 }}>
-              <div style={{ display: 'flex', gap: 32 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statTime, 32)}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statWeather, 32)}</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: 23 * scale, fontWeight: 600, opacity: 0.6, marginTop: -10 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statTime, 17 * scale)}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statWeather, 17 * scale)}</div>
               </div>
-              <div style={{ display: 'flex', gap: 32 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statBattery, 32)}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statLoc, 32)}</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statBattery, 17 * scale)}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statLoc, 17 * scale)}</div>
               </div>
             </div>
 
@@ -119,7 +123,7 @@ export async function GET(request: Request) {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 0, marginTop: 40 }}>
               <div style={{ 
                 display: 'flex', 
-                fontSize: 64, // Larger title for 1200px image
+                fontSize: 34 * scale, // Larger title for 1200px image
                 fontWeight: 800, 
                 lineHeight: 1.1, 
                 // maxWidth: '100%',
@@ -131,13 +135,13 @@ export async function GET(request: Request) {
               </div>
               <div style={{ 
                 display: 'flex', 
-                fontSize: 80, 
+                fontSize: 30 * scale, 
                 transform: 'rotate(-12deg)', 
                 marginTop: 10,
                 // Optional: Add a subtle shadow to emojis to make them pop
                 filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1))'
               }}>
-                {formatTextWithAppleEmojis(emojis, 80)}
+                {formatTextWithAppleEmojis(emojis, 72 * scale)}
               </div>
             </div>
           </div>
@@ -146,7 +150,7 @@ export async function GET(request: Request) {
           {/* flexGrow: 1 ensures this fills the empty space in the middle */}
           <div style={{ 
             display: 'flex', 
-            fontSize: descFontSize, // Uses the calculated size
+            fontSize: 24 * scale, // Uses the calculated size
             lineHeight: 1.4, 
             opacity: 0.95,
             flexGrow: 1, // Takes up remaining space
@@ -160,8 +164,8 @@ export async function GET(request: Request) {
       </div>
     ),
     {
-      width: width,
-      height: height,
+      width: width * scale,
+      height: height * scale,
       fonts: interBold && interMedium ? [
         { name: 'SF Pro Display', data: interBold, weight: 700, style: 'normal' },
         { name: 'SF Pro Display', data: interMedium, weight: 400, style: 'normal' },
