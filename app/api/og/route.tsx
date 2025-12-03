@@ -158,7 +158,7 @@ export async function GET(request: Request) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
             
             {/* Meta Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: 23 * scale, fontWeight: 600, opacity: 0.6, marginTop: 5 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: 23 * scale, fontWeight: 600, opacity: 0.6, marginTop: 0 }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statTime, 17 * scale)}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statWeather, 17 * scale)}</div>
