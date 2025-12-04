@@ -170,15 +170,43 @@ export async function GET(request: Request) {
             
             {/* Meta Row */}
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: 23 * scale, fontWeight: 600, opacity: 0.6, marginTop: 0 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statTime, 17 * scale)}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statWeather, 17 * scale)}</div>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statBattery, 17 * scale)}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{formatTextWithAppleEmojis(statLoc, 17 * scale)}</div>
-              </div>
-            </div>
+  
+  {/* Left Column (Time/Weather) - Default alignment */}
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      {formatTextWithAppleEmojis(statTime, 17 * scale)}
+    </div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      {formatTextWithAppleEmojis(statWeather, 17 * scale)}
+    </div>
+  </div>
+
+  {/* Right Column (Battery/Location) - Aligned to End */}
+  <div style={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      gap: 12, 
+      alignItems: 'flex-end' // <--- 1. Moves the whole column stack to the right
+    }}>
+    <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: 10, 
+        justifyContent: 'flex-end' // <--- 2. Ensures content inside starts from the right
+      }}>
+      {formatTextWithAppleEmojis(statBattery, 17 * scale)}
+    </div>
+    <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: 10, 
+        justifyContent: 'flex-end' // <--- 2. Ensures content inside starts from the right
+      }}>
+      {formatTextWithAppleEmojis(statLoc, 17 * scale)}
+    </div>
+  </div>
+
+</div>
 
             {/* Title & Emoji Row */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 20, marginTop: 10 }}>
