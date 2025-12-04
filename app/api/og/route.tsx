@@ -169,7 +169,7 @@ export async function GET(request: Request) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
             
             {/* Meta Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: 23 * scale, fontWeight: 600, opacity: 0.6, marginTop: 0 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: 23 * scale, fontWeight: 600, opacity: 0.75, marginTop: 0 }}>
   
   {/* Left Column (Time/Weather) - Default alignment */}
   <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
