@@ -27,54 +27,23 @@ const formatTextWithAppleEmojis = (text: string, size: number = 32) => {
   
   const parts = text.split(emojiRegex);
 
-  return (
-    <>
-      {/* 
-        1. DEFINE THE FILTER 
-        This SVG is invisible but defines the "Sticker" effect.
-        radius="2" controls the thickness. Change to "3" for even thicker.
-      */}
-      <svg width="0" height="0" style={{ position: 'absolute', visibility: 'hidden' }}>
-        <filter id="sticker-outline" x="-50%" y="-50%" width="200%" height="200%">
-          {/* Dilate expands the shape (makes it thicker) */}
-          <feMorphology in="SourceAlpha" result="EXPANDED" operator="dilate" radius="2" />
-          {/* Turn the expanded shape white */}
-          <feFlood floodColor="white" result="WHITE" />
-          {/* Clip the white flood to the expanded shape */}
-          <feComposite in="WHITE" in2="EXPANDED" operator="in" result="OUTLINE" />
-          {/* Stack the original image on top of the outline */}
-          <feMerge>
-            <feMergeNode in="OUTLINE" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </svg>
-
-      {/* 2. RENDER THE CONTENT */}
-      {parts.map((part, index) => {
-        if (part.match(emojiRegex)) {
-          return (
-            <img
-              key={index}
-              src={`https://emojicdn.elk.sh/${encodeURIComponent(part)}?style=apple`}
-              width={size}
-              height={size}
-              style={{ 
-                marginLeft: 4, // Increased margin slightly so outline doesn't hit text
-                marginRight: 4, 
-                filter: 'url(#sticker-outline)', // Apply the filter defined above
-                overflow: 'visible', // Crucial: allows outline to spill outside the box
-                verticalAlign: 'middle' // Aligns emoji better with text
-              }}
-              alt={part}
-            />
-          );
-        }
-        if (!part) return null;
-        return <span key={index}>{part}</span>;
-      })}
-    </>
-  );
+  return parts.map((part, index) => {
+    if (part.match(emojiRegex)) {
+      return (
+        <img
+          key={index}
+          src={`https://emojicdn.elk.sh/${encodeURIComponent(part)}?style=apple`}
+          width={size}
+          height={size}
+          style={{ marginLeft: 2, marginRight: 2 }}
+           
+          alt={part}
+        />
+      );
+    }
+    if (!part) return null;
+    return <span key={index}>{part}</span>;
+  });
 };
 
 const formatTextWithAppleEmojisOutlined = (text: string, size: number = 32, outlineSize: number = 8) => {
