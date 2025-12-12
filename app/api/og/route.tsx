@@ -2,25 +2,6 @@ import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
 
-const OutlineFilter = () => (
-  <svg width="0" height="0" style={{ position: 'absolute' }}>
-    <filter id="sticker-outline">
-      {/* 1. Take the alpha channel (shape) and expand it by 3px */}
-      <feMorphology in="SourceAlpha" result="EXPANDED" operator="dilate" radius="3" />
-      
-      {/* 2. Make the expanded shape white */}
-      <feFlood floodColor="white" result="WHITE" />
-      <feComposite in="WHITE" in2="EXPANDED" operator="in" result="OUTLINE" />
-      
-      {/* 3. Stack the original image on top of the white outline */}
-      <feMerge>
-        <feMergeNode in="OUTLINE" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
-    </filter>
-  </svg>
-);
-
 // --- 1. Helper: Emoji Replacement ---
 const formatTextWithAppleEmojis = (text: string, size: number = 32) => {
   const emojiRegex = /((?:[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])[\uFE00-\uFE0F]?)/g;
