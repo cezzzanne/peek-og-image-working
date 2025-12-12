@@ -2,28 +2,79 @@ import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
 
+const OutlineFilter = () => (
+  <svg width="0" height="0" style={{ position: 'absolute' }}>
+    <filter id="sticker-outline">
+      {/* 1. Take the alpha channel (shape) and expand it by 3px */}
+      <feMorphology in="SourceAlpha" result="EXPANDED" operator="dilate" radius="3" />
+      
+      {/* 2. Make the expanded shape white */}
+      <feFlood floodColor="white" result="WHITE" />
+      <feComposite in="WHITE" in2="EXPANDED" operator="in" result="OUTLINE" />
+      
+      {/* 3. Stack the original image on top of the white outline */}
+      <feMerge>
+        <feMergeNode in="OUTLINE" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </svg>
+);
+
 // --- 1. Helper: Emoji Replacement ---
 const formatTextWithAppleEmojis = (text: string, size: number = 32) => {
   const emojiRegex = /((?:[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])[\uFE00-\uFE0F]?)/g;
   
   const parts = text.split(emojiRegex);
 
-  return parts.map((part, index) => {
-    if (part.match(emojiRegex)) {
-      return (
-        <img
-          key={index}
-          src={`https://emojicdn.elk.sh/${encodeURIComponent(part)}?style=apple`}
-          width={size}
-          height={size}
-          style={{ marginLeft: 2, marginRight: 2 }}
-          alt={part}
-        />
-      );
-    }
-    if (!part) return null;
-    return <span key={index}>{part}</span>;
-  });
+  return (
+    <>
+      {/* 
+        1. DEFINE THE FILTER 
+        This SVG is invisible but defines the "Sticker" effect.
+        radius="2" controls the thickness. Change to "3" for even thicker.
+      */}
+      <svg width="0" height="0" style={{ position: 'absolute', visibility: 'hidden' }}>
+        <filter id="sticker-outline" x="-50%" y="-50%" width="200%" height="200%">
+          {/* Dilate expands the shape (makes it thicker) */}
+          <feMorphology in="SourceAlpha" result="EXPANDED" operator="dilate" radius="2" />
+          {/* Turn the expanded shape white */}
+          <feFlood floodColor="white" result="WHITE" />
+          {/* Clip the white flood to the expanded shape */}
+          <feComposite in="WHITE" in2="EXPANDED" operator="in" result="OUTLINE" />
+          {/* Stack the original image on top of the outline */}
+          <feMerge>
+            <feMergeNode in="OUTLINE" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </svg>
+
+      {/* 2. RENDER THE CONTENT */}
+      {parts.map((part, index) => {
+        if (part.match(emojiRegex)) {
+          return (
+            <img
+              key={index}
+              src={`https://emojicdn.elk.sh/${encodeURIComponent(part)}?style=apple`}
+              width={size}
+              height={size}
+              style={{ 
+                marginLeft: 4, // Increased margin slightly so outline doesn't hit text
+                marginRight: 4, 
+                filter: 'url(#sticker-outline)', // Apply the filter defined above
+                overflow: 'visible', // Crucial: allows outline to spill outside the box
+                verticalAlign: 'middle' // Aligns emoji better with text
+              }}
+              alt={part}
+            />
+          );
+        }
+        if (!part) return null;
+        return <span key={index}>{part}</span>;
+      })}
+    </>
+  );
 };
 
 const formatTextWithAppleEmojisOutlined = (text: string, size: number = 32, outlineSize: number = 8) => {
@@ -50,13 +101,6 @@ const formatTextWithAppleEmojisOutlined = (text: string, size: number = 32, outl
             src={src}
             width={size}
             height={size}
-            // style={{
-            //   position: 'absolute',
-            //   top: 0,
-            //   left: 0,
-            //   filter: 'brightness(0) invert(1)',
-            //   transform: `scale(${1 + outlineSize / size * 2})`,
-            // }}
             alt=""
           />
           <img
@@ -266,7 +310,7 @@ export async function GET(request: Request) {
             <svg width={20 * scale} height={20 * scale} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
             </svg>
-            <div style={{ display: 'flex' }}>Comment</div>
+            <div style={{ display: 'flex', fontSize: 24 * scale }}>Comment</div>
           </div>
 
           <div style={{ display: 'flex', gap: 10 * scale }}>
