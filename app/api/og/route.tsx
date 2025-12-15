@@ -95,6 +95,8 @@ export async function GET(request: Request) {
   const statBattery = searchParams.get('sBattery') || '';
   const statLoc = searchParams.get('sLoc') || '';
   const emojis = searchParams.get('emojis') || '🚗 🏠';
+  const name = searchParams.get('name') || "User";
+  const uuid = searchParams.get('uuid') || "default";
 
   // Load Fonts
   const interBold = await fetch(
@@ -121,12 +123,12 @@ export async function GET(request: Request) {
     maxDescLength = 320;
   }
 
-  if (rawDesc.length >= 240) {
+  if (rawDesc.length >= 260) {
     descFontSize = 21;
     maxDescLength = 320;
   }
 
-  if (rawDesc.length > 280) {
+  if (rawDesc.length > 320) {
     descFontSize = 17;
     maxDescLength = 320;
   }
@@ -138,6 +140,8 @@ export async function GET(request: Request) {
   const longDescription = truncate(rawDesc, maxDescLength);
 
   const scale = 1
+
+  let imageString = "https://circles2.s3.amazonaws.com/links/images/" + uuid
 
   return new ImageResponse(
     (
@@ -203,7 +207,7 @@ export async function GET(request: Request) {
 </div>
 
             {/* Title & Emoji Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 20, marginTop: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, marginTop: 10 }}>
               <div style={{ 
                 display: 'flex', 
                 fontSize: 32 * scale, // Larger title for 1200px image
@@ -220,7 +224,6 @@ export async function GET(request: Request) {
                 display: 'flex', 
                 fontSize: 30 * scale, 
                 transform: 'rotate(-12deg)', 
-                marginTop: 10
 
               }}>
                 <p>{formatTextWithAppleEmojis(emojis, 57 * scale)}</p>
@@ -243,6 +246,19 @@ export async function GET(request: Request) {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+            <div style={{ display: 'flex', gap: 10 * scale, alignItems: 'center' }}>
+                <img 
+                    src={imageString} 
+                    alt="Profile"
+                    style={{
+                        width: 35 * scale,   // Adjust size as needed
+                        height: 35 * scale,  // Keep width and height the same
+                        borderRadius: '50%', // Makes the image circular
+                        objectFit: 'cover'   // Prevents image distortion
+                    }}
+                />
+                <div style={{ display: 'flex', fontSize: 18 * scale }}>{name}</div>
+            </div>
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -257,13 +273,13 @@ export async function GET(request: Request) {
             fontSize: 26 * scale,
             fontWeight: 700,
           }}>
-            <svg width={20 * scale} height={20 * scale} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            {/* <svg width={20 * scale} height={20 * scale} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-            </svg>
-            <div style={{ display: 'flex', fontSize: 24 * scale }}>Comment</div>
+            </svg> */}
+            <div style={{ display: 'flex', fontSize: 18 * scale }}>peekapp.live</div>
           </div>
 
-          <div style={{ display: 'flex', gap: 10 * scale }}>
+          {/* <div style={{ display: 'flex', gap: 10 * scale }}>
             <div style={{ width: 48 * scale, height: 48 * scale, borderRadius: 24 * scale, backgroundColor: lighterCard, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 {formatTextWithAppleEmojis('🚗', 24 * scale)}
             </div>
@@ -273,7 +289,7 @@ export async function GET(request: Request) {
             <div style={{ width: 48 * scale, height: 48. * scale, borderRadius: 24 * scale, backgroundColor: lighterCard, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 {formatTextWithAppleEmojis('👍', 24 * scale)}
             </div>
-          </div>
+          </div> */}
 
         </div>
 
