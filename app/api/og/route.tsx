@@ -119,7 +119,7 @@ export async function GET(request: Request) {
     maxDescLength = 240;
   }
   if (rawDesc.length > 200) {
-    descFontSize = 26;
+    descFontSize = 23;
     maxDescLength = 320;
   }
 
@@ -235,7 +235,7 @@ export async function GET(request: Request) {
           {/* flexGrow: 1 ensures this fills the empty space in the middle */}
           <div style={{ 
             display: 'flex', 
-            fontSize: descFontSize * scale, // Uses the calculated size
+            fontSize: descFontSize, // Uses the calculated size
             lineHeight: 1.4, 
             opacity: 0.95,
             flexGrow: 1, // Takes up remaining space
