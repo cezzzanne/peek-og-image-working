@@ -135,11 +135,11 @@ export async function GET(request: Request) {
 
   let titleFontSize = 32
 
-  if (title.length > 8) { 
+  if (title.length > 10) { 
     titleFontSize = 30
   }
 
-  if (title.length > 12) {
+  if (title.length > 13) {
     titleFontSize = 27
   }
 
