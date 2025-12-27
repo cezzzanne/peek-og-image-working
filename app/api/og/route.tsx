@@ -133,6 +133,20 @@ export async function GET(request: Request) {
     maxDescLength = 320;
   }
 
+  let titleFontSize = 32
+
+  if (title.length > 8) { 
+    titleFontSize = 30
+  }
+
+  if (title.length > 12) {
+    titleFontSize = 27
+  }
+
+  if (title.length > 15) {
+    titleFontSize = 24
+  }
+
   const truncate = (str: string, n: number) => {
   return (str.length > n) ? str.slice(0, n - 1) + '...' : str;
 };
@@ -207,10 +221,10 @@ export async function GET(request: Request) {
 </div>
 
             {/* Title & Emoji Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, marginTop: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginTop: 10 }}>
               <div style={{ 
                 display: 'flex', 
-                fontSize: 32 * scale, // Larger title for 1200px image
+                fontSize: titleFontSize * scale, // Larger title for 1200px image
                 fontWeight: 800, 
                 lineHeight: 1.1, 
                 // maxWidth: '100%',
