@@ -138,6 +138,7 @@ export async function GET(request: Request) {
   if (title.length > 10) { 
     titleFontSize = 30
   }
+  
 
   if (title.length > 13) {
     titleFontSize = 27
