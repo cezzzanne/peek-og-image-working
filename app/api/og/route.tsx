@@ -111,26 +111,26 @@ export async function GET(request: Request) {
   const width = 600;
   const height = 600;
 
-    let descFontSize = 26;
-  let maxDescLength = 180;
+    let descFontSize = 29;
+  let maxDescLength = 480;
 
   if (rawDesc.length > 100) {
-    descFontSize = 26;
-    maxDescLength = 240;
+    descFontSize = 29;
+    // maxDescLength = 240;
   }
   if (rawDesc.length > 200) {
-    descFontSize = 23;
-    maxDescLength = 320;
+    descFontSize = 27;
+    // maxDescLength = 320;
   }
 
   if (rawDesc.length >= 260) {
-    descFontSize = 21;
-    maxDescLength = 320;
+    descFontSize = 23;
+    // maxDescLength = 320;
   }
 
   if (rawDesc.length > 320) {
-    descFontSize = 17;
-    maxDescLength = 320;
+    descFontSize = 20;
+    // maxDescLength = 320;
   }
 
   let titleFontSize = 32
@@ -138,7 +138,7 @@ export async function GET(request: Request) {
   if (title.length > 10) { 
     titleFontSize = 30
   }
-  
+
 
   if (title.length > 13) {
     titleFontSize = 27
