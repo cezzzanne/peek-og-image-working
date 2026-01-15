@@ -6,7 +6,11 @@ export const runtime = 'edge';
 const formatTextWithAppleEmojis = (text: string, size: number = 32) => {
   const emojiRegex = /((?:[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])[\uFE00-\uFE0F]?)/g;
   
-  const parts = text.split(emojiRegex);
+  var parts = text.split(emojiRegex);
+
+  if (parts.length > 1) {
+    parts = parts.slice(0, 2)
+  }
 
   return parts.map((part, index) => {
     if (part.match(emojiRegex)) {
