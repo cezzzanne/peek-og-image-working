@@ -8,12 +8,15 @@ const formatTextWithAppleEmojis = (text: string, size: number = 32) => {
   
   var parts = text.split(emojiRegex);
 
-  if (parts.length > 1) {
-    parts = parts.slice(0, 2)
-  }
+ 
+  var partCount = 0
 
   return parts.map((part, index) => {
     if (part.match(emojiRegex)) {
+        partCount++
+        if (partCount > 2) {
+            return null
+        }
       return (
         <img
           key={index}
