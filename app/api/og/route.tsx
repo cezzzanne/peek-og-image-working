@@ -140,7 +140,7 @@ export async function GET(request: Request) {
     // maxDescLength = 320;
   }
 
-  if (rawDesc.length > 320 && title.length > 25) {
+  if (rawDesc.length > 320 && title.length > 150) {
     descFontSize = 17
   }
 
