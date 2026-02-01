@@ -229,10 +229,10 @@ export async function GET(request: Request) {
   {/* Left Column (Time/Weather) - Default alignment */}
   <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-      {formatTextWithAppleEmojis(statTime, 19 * scale)}
+      {formatTextWithAppleEmojisOutline(statTime, 19 * scale, 2)}
     </div>
     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-      {formatTextWithAppleEmojis(statWeather, 25 * scale)}
+      {formatTextWithAppleEmojisOutline(statWeather, 25 * scale, 2)}
     </div>
   </div>
 
@@ -249,7 +249,7 @@ export async function GET(request: Request) {
         gap: 10, 
         justifyContent: 'flex-end' // <--- 2. Ensures content inside starts from the right
       }}>
-      {formatTextWithAppleEmojis(statBattery, 19 * scale)}
+      {formatTextWithAppleEmojisOutline(statBattery, 19 * scale, 2)}
     </div>
     <div style={{ 
         display: 'flex', 
@@ -257,14 +257,14 @@ export async function GET(request: Request) {
         gap: 10, 
         justifyContent: 'flex-end' // <--- 2. Ensures content inside starts from the right
       }}>
-      {formatTextWithAppleEmojis(statLoc, 19 * scale)}
+      {formatTextWithAppleEmojisOutline(statLoc, 19 * scale, 2)}
     </div>
   </div>
 
 </div>
 
             {/* Title & Emoji Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginTop: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 20, marginTop: 10 }}>
               <div style={{ 
                 display: 'flex', 
                 fontSize: titleFontSize * scale, // Larger title for 1200px image
@@ -294,8 +294,8 @@ export async function GET(request: Request) {
             display: 'flex', 
             fontSize: descFontSize * scale, // Uses the calculated size
             lineHeight: 1.4, 
-            opacity: 0.95,
-            flexGrow: 1, // Takes up remaining space
+            opacity: 0.90,
+            // flexGrow: 1, // Takes up remaining space
             overflow: 'hidden', // Hides anything that still overflows
             alignItems: 'center'
           }}>
