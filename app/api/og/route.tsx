@@ -107,6 +107,25 @@ const formatTextWithAppleEmojisOutline = (text: string, size: number = 32, outli
   });
 };
 
+const fetchColoredIcon = async (iconName: string, color: string, weight: string = 'regular'): Promise<string> => {
+  const url = `https://unpkg.com/@phosphor-icons/core@2.1.1/assets/fill/${iconName}-fill.svg`;
+  const response = await fetch(url);
+  let svg = await response.text();
+  
+  // Replace any existing fill with the new color, or add fill to the svg tag
+   // Remove the existing fill="currentColor"
+  svg = svg.replace(/fill="currentColor"/g, '');
+  
+  // Add the new fill color
+  svg = svg.replace(/<svg/, `<svg fill="${color}"`);
+  
+    console.log(svg);
+
+  // Convert to data URI for use in img src
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+};
+
+
 
 const addHash = (color: string | null, fallback: string) => {
   if (!color) return fallback;
@@ -132,6 +151,14 @@ export async function GET(request: Request) {
   const statWeather = searchParams.get('sWeather') || '';
   const statBattery = searchParams.get('sBattery') || '';
   const statLoc = searchParams.get('sLoc') || '';
+
+  // Meta icons
+ const statTimeIcon = searchParams.get('sTimeIcon') || '';
+  const statWeatherIcon = searchParams.get('sWeatherIcon') || '';
+  const statBatteryIcon = searchParams.get('sBatteryIcon') || '';
+  const statLocIcon = searchParams.get('sLocIcon') || '';
+
+
   const emojis = searchParams.get('emojis') || '🚗 🏠';
   const name = searchParams.get('name') || "User";
   const uuid = searchParams.get('uuid') || "default";
@@ -197,6 +224,10 @@ export async function GET(request: Request) {
   const longDescription = truncate(rawDesc, maxDescLength);
 
   const scale = 2
+  const timeIcon = await fetchColoredIcon(statTimeIcon, textColor, 'bold');
+  const weatherIcon = await fetchColoredIcon(statWeatherIcon, textColor, 'bold');
+  const batteryIcon = await fetchColoredIcon(statBatteryIcon, textColor, 'bold');
+  const locIcon = await fetchColoredIcon(statLocIcon, textColor, 'bold');
 
   let imageString = "https://circles2.s3.amazonaws.com/links/images/" + uuid
 
@@ -229,10 +260,16 @@ export async function GET(request: Request) {
   {/* Left Column (Time/Weather) - Default alignment */}
   <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-      {formatTextWithAppleEmojisOutline(statTime, 19 * scale, 2)}
+     <span>
+      <img src={timeIcon} width={24 * scale} height={24 * scale} />
+      <span style={{marginTop: -8, marginLeft: 6}}> {statTime}</span>
+      </span>
     </div>
     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-      {formatTextWithAppleEmojisOutline(statWeather, 25 * scale, 2)}
+      <span>
+      <img src={weatherIcon} width={24 * scale} height={24 * scale} />
+      <span style={{marginTop: -8, marginLeft: 6}}> {statWeather}</span>
+      </span>
     </div>
   </div>
 
@@ -249,7 +286,10 @@ export async function GET(request: Request) {
         gap: 10, 
         justifyContent: 'flex-end' // <--- 2. Ensures content inside starts from the right
       }}>
-      {formatTextWithAppleEmojisOutline(statBattery, 19 * scale, 2)}
+      <span>
+      <img src={batteryIcon} width={24 * scale} height={24 * scale} />
+      <span style={{marginTop: -8, marginLeft: 6}}> {statBattery}</span>
+      </span>
     </div>
     <div style={{ 
         display: 'flex', 
@@ -257,7 +297,10 @@ export async function GET(request: Request) {
         gap: 10, 
         justifyContent: 'flex-end' // <--- 2. Ensures content inside starts from the right
       }}>
-      {formatTextWithAppleEmojisOutline(statLoc, 19 * scale, 2)}
+     <span>
+      <img src={locIcon} width={24 * scale} height={24 * scale} />
+      <span style={{marginTop: -8, marginLeft: 6}}> {statLoc}</span>
+      </span>
     </div>
   </div>
 
