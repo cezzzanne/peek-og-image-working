@@ -176,15 +176,15 @@ export async function GET(request: Request) {
   const width = 600;
   const height = 600;
 
-    let descFontSize = 29;
+    let descFontSize = 27;
   let maxDescLength = 480;
 
   if (rawDesc.length > 100) {
-    descFontSize = 29;
+    descFontSize = 27;
     // maxDescLength = 240;
   }
   if (rawDesc.length > 200) {
-    descFontSize = 27;
+    descFontSize = 26;
     // maxDescLength = 320;
   }
 
