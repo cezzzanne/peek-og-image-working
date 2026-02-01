@@ -34,38 +34,68 @@ const formatTextWithAppleEmojis = (text: string, size: number = 32) => {
   });
 };
 
-const formatTextWithAppleEmojisOutlined = (text: string, size: number = 32, outlineSize: number = 8) => {
+const formatTextWithAppleEmojisOutline = (text: string, size: number = 32, outlineWidth: number = 6) => {
   const emojiRegex = /((?:[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])[\uFE00-\uFE0F]?)/g;
   
   const parts = text.split(emojiRegex);
+  let partCount = 0;
+
+  // Offsets for the outline effect (8 directions)
+  const offsets = [
+    [-outlineWidth, -outlineWidth],
+    [0, -outlineWidth],
+    [outlineWidth, -outlineWidth],
+    [-outlineWidth, 0],
+    [outlineWidth, 0],
+    [-outlineWidth, outlineWidth],
+    [0, outlineWidth],
+    [outlineWidth, outlineWidth],
+  ];
 
   return parts.map((part, index) => {
     if (part.match(emojiRegex)) {
+      partCount++;
+      if (partCount > 2) return null;
+      
       const src = `https://emojicdn.elk.sh/${encodeURIComponent(part)}?style=apple`;
+      
       return (
         <span
           key={index}
           style={{
             position: 'relative',
-            // display: 'inline-block',
-            width: size,
-            height: size,
+            display: 'flex',
+            width: size + outlineWidth * 2,
+            height: size + outlineWidth * 2,
             marginLeft: 2,
             marginRight: 2,
           }}
         >
-          <img
-            src={src}
-            width={size}
-            height={size}
-            alt=""
-          />
+          {/* White outline layers */}
+          {offsets.map(([x, y], i) => (
+            <img
+              key={`outline-${i}`}
+              src={src}
+              width={size}
+              height={size}
+              style={{
+                position: 'absolute',
+                left: outlineWidth + x,
+                top: outlineWidth + y,
+                filter: 'brightness(0) invert(1)', // Makes it white
+              }}
+              alt=""
+            />
+          ))}
+          {/* Main emoji on top */}
           <img
             src={src}
             width={size}
             height={size}
             style={{
-              position: 'relative',
+              position: 'absolute',
+              left: outlineWidth,
+              top: outlineWidth,
             }}
             alt={part}
           />
@@ -76,6 +106,7 @@ const formatTextWithAppleEmojisOutlined = (text: string, size: number = 32, outl
     return <span key={index}>{part}</span>;
   });
 };
+
 
 const addHash = (color: string | null, fallback: string) => {
   if (!color) return fallback;
@@ -165,7 +196,7 @@ export async function GET(request: Request) {
 
   const longDescription = truncate(rawDesc, maxDescLength);
 
-  const scale = 1
+  const scale = 2
 
   let imageString = "https://circles2.s3.amazonaws.com/links/images/" + uuid
 
@@ -198,10 +229,10 @@ export async function GET(request: Request) {
   {/* Left Column (Time/Weather) - Default alignment */}
   <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-      {formatTextWithAppleEmojis(statTime, 17 * scale)}
+      {formatTextWithAppleEmojis(statTime, 19 * scale)}
     </div>
     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-      {formatTextWithAppleEmojis(statWeather, 17 * scale)}
+      {formatTextWithAppleEmojis(statWeather, 25 * scale)}
     </div>
   </div>
 
@@ -218,7 +249,7 @@ export async function GET(request: Request) {
         gap: 10, 
         justifyContent: 'flex-end' // <--- 2. Ensures content inside starts from the right
       }}>
-      {formatTextWithAppleEmojis(statBattery, 17 * scale)}
+      {formatTextWithAppleEmojis(statBattery, 19 * scale)}
     </div>
     <div style={{ 
         display: 'flex', 
@@ -226,7 +257,7 @@ export async function GET(request: Request) {
         gap: 10, 
         justifyContent: 'flex-end' // <--- 2. Ensures content inside starts from the right
       }}>
-      {formatTextWithAppleEmojis(statLoc, 17 * scale)}
+      {formatTextWithAppleEmojis(statLoc, 19 * scale)}
     </div>
   </div>
 
@@ -252,7 +283,7 @@ export async function GET(request: Request) {
                 transform: 'rotate(-12deg)', 
 
               }}>
-                <p>{formatTextWithAppleEmojis(emojis, 57 * scale)}</p>
+                <p>{formatTextWithAppleEmojisOutline(emojis, 57 * scale)}</p>
               </div>
             </div>
           </div>
@@ -261,7 +292,7 @@ export async function GET(request: Request) {
           {/* flexGrow: 1 ensures this fills the empty space in the middle */}
           <div style={{ 
             display: 'flex', 
-            fontSize: descFontSize, // Uses the calculated size
+            fontSize: descFontSize * scale, // Uses the calculated size
             lineHeight: 1.4, 
             opacity: 0.95,
             flexGrow: 1, // Takes up remaining space
