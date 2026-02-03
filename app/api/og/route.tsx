@@ -307,7 +307,7 @@ export async function GET(request: Request) {
 </div>
 
             {/* Title & Emoji Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 20, marginTop: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 20, marginTop: 20 }}>
               <div style={{ 
                 display: 'flex', 
                 fontSize: titleFontSize * scale, // Larger title for 1200px image
