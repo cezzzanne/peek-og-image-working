@@ -175,7 +175,7 @@ export async function GET(request: Request) {
 
   // Standard OG Dimensions
   const width = 600;
-  const height = bitmojiImageUrl != '' ? 950 : 600;
+  const height = bitmojiImageUrl != '' ? 800 : 600;
 
     let descFontSize = 27;
   let maxDescLength = 480;
@@ -363,19 +363,19 @@ export async function GET(request: Request) {
             {longDescription}
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+        {/* <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
             <div style={{ display: 'flex', gap: 10 * scale, alignItems: 'center' }}>
                 <img 
                     src={imageString} 
                     alt="Profile"
                     style={{
-                        width: 35 * scale,   // Adjust size as needed
-                        height: 35 * scale,  // Keep width and height the same
+                        width: 30 * scale,   // Adjust size as needed
+                        height: 30 * scale,  // Keep width and height the same
                         borderRadius: '50%', // Makes the image circular
                         objectFit: 'cover'   // Prevents image distortion
                     }}
                 />
-                <div style={{ display: 'flex', fontSize: 18 * scale }}>{name}</div>
+                <div style={{ display: 'flex', fontSize: 15 * scale }}>{name}</div>
             </div>
           <div style={{
             display: 'flex',
@@ -391,25 +391,10 @@ export async function GET(request: Request) {
             fontSize: 26 * scale,
             fontWeight: 700,
           }}>
-            {/* <svg width={20 * scale} height={20 * scale} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-            </svg> */}
-            <div style={{ display: 'flex', fontSize: 18 * scale }}>peekapp.live</div>
+            <div style={{ display: 'flex', fontSize: 15 * scale }}>peekapp.live</div>
           </div>
 
-          {/* <div style={{ display: 'flex', gap: 10 * scale }}>
-            <div style={{ width: 48 * scale, height: 48 * scale, borderRadius: 24 * scale, backgroundColor: lighterCard, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                {formatTextWithAppleEmojis('🚗', 24 * scale)}
-            </div>
-            <div style={{ width: 48 * scale, height: 48 * scale, borderRadius: 24 * scale, backgroundColor: lighterCard, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                {formatTextWithAppleEmojis('🏢', 24 * scale)}
-            </div>
-            <div style={{ width: 48 * scale, height: 48. * scale, borderRadius: 24 * scale, backgroundColor: lighterCard, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                {formatTextWithAppleEmojis('👍', 24 * scale)}
-            </div>
-          </div> */}
-
-        </div>
+        </div> */}
 
           
       </div>
