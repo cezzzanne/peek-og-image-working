@@ -177,25 +177,25 @@ export async function GET(request: Request) {
   const width = 600;
   const height = bitmojiImageUrl != '' ? 800 : 600;
 
-    let descFontSize = 27;
+    let descFontSize = 25;
   let maxDescLength = 480;
 
   if (rawDesc.length > 100) {
-    descFontSize = 27;
+    descFontSize = 25;
     // maxDescLength = 240;
   }
   if (rawDesc.length > 200) {
-    descFontSize = 26;
+    descFontSize = 24;
     // maxDescLength = 320;
   }
 
   if (rawDesc.length >= 260) {
-    descFontSize = 23;
+    descFontSize = 22;
     // maxDescLength = 320;
   }
 
   if (rawDesc.length > 320) {
-    descFontSize = 20;
+    descFontSize = 19;
     // maxDescLength = 320;
   }
 
@@ -203,19 +203,19 @@ export async function GET(request: Request) {
     descFontSize = 17
   }
 
-  let titleFontSize = 32
+  let titleFontSize = 33
 
   if (title.length > 10) { 
-    titleFontSize = 30
+    titleFontSize = 31
   }
 
 
   if (title.length > 13) {
-    titleFontSize = 27
+    titleFontSize = 28
   }
 
   if (title.length > 15) {
-    titleFontSize = 24
+    titleFontSize = 25
   }
 
   const truncate = (str: string, n: number) => {
