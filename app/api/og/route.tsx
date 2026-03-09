@@ -316,7 +316,7 @@ export async function GET(request: Request) {
                     style={{
                         // width: 35 * scale,   // Adjust size as needed
                         height: 575,  // Keep width and height the same
-                        borderRadius: 24, // Makes the image circular
+                        borderRadius: 44, // Makes the image circular
                         // objectFit: 'cover'   // Prevents image distortion
                     }}
                 />
