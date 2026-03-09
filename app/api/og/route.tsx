@@ -175,7 +175,7 @@ export async function GET(request: Request) {
 
   // Standard OG Dimensions
   const width = 600;
-  const height = bitmojiImageUrl != '' ? 900 : 600;
+  const height = bitmojiImageUrl != '' ? 950 : 600;
 
     let descFontSize = 27;
   let maxDescLength = 480;
