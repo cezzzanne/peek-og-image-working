@@ -162,6 +162,7 @@ export async function GET(request: Request) {
   const emojis = searchParams.get('emojis') || '🚗 🏠';
   const name = searchParams.get('name') || "User";
   const uuid = searchParams.get('uuid') || "default";
+  const bitmojiImageUrl = searchParams.get('bitmojiImageUrl') || '';
 
   // Load Fonts
   const interBold = await fetch(
@@ -174,7 +175,7 @@ export async function GET(request: Request) {
 
   // Standard OG Dimensions
   const width = 600;
-  const height = 600;
+  const height = bitmojiImageUrl != '' ? 900 : 600;
 
     let descFontSize = 27;
   let maxDescLength = 480;
@@ -230,6 +231,8 @@ export async function GET(request: Request) {
   const locIcon = await fetchColoredIcon(statLocIcon, textColor, 'bold');
 
   let imageString = "https://circles2.s3.amazonaws.com/links/images/" + uuid
+
+  let bitmojiImage = "https://circles2.s3.amazonaws.com/live-activity/produced-images/" + bitmojiImageUrl
 
   return new ImageResponse(
     (
@@ -306,8 +309,22 @@ export async function GET(request: Request) {
 
 </div>
 
+          {bitmojiImageUrl != '' && 
+                <img 
+                    src={bitmojiImage} 
+                    alt="bitmoji"
+                    style={{
+                        // width: 35 * scale,   // Adjust size as needed
+                        height: 575,  // Keep width and height the same
+                        borderRadius: 24, // Makes the image circular
+                        // objectFit: 'cover'   // Prevents image distortion
+                    }}
+                />
+          
+          }
+            
             {/* Title & Emoji Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 20, marginTop: 20 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 20, marginTop: 0 }}>
               <div style={{ 
                 display: 'flex', 
                 fontSize: titleFontSize * scale, // Larger title for 1200px image
@@ -331,6 +348,7 @@ export async function GET(request: Request) {
             </div>
           </div>
 
+            
           {/* Middle Section: Description */}
           {/* flexGrow: 1 ensures this fills the empty space in the middle */}
           <div style={{ 
