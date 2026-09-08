@@ -5,6 +5,14 @@ export const runtime = 'edge';
 const emojiSrc = (e: string) =>
   `https://emojicdn.elk.sh/${encodeURIComponent(e)}?style=apple`;
 
+
+function ringOffsets(radius: number, count: number): [number, number][] {
+  return Array.from({ length: count }, (_, i) => {
+    const a = (i / count) * Math.PI * 2;
+    return [Math.round(Math.cos(a) * radius), Math.round(Math.sin(a) * radius)];
+  });
+}
+
 const clamp = (n: number, lo: number, hi: number) =>
   Number.isFinite(n) ? Math.min(hi, Math.max(lo, n)) : lo;
 
@@ -13,10 +21,11 @@ function OutlinedEmoji({
 }: { emoji: string; size: number; outline: number; marginLeft?: number }) {
   const src = emojiSrc(emoji);
   const box = size + outline * 2;
-  const d = outline * 0.71; // diagonals shorter so the outline looks round
+
+  // Outer ring gives a smooth edge, inner ring fills the gaps between them.
   const offsets = [
-    [-outline, 0], [outline, 0], [0, -outline], [0, outline],
-    [-d, -d], [d, -d], [-d, d], [d, d],
+    ...ringOffsets(outline, 16),
+    ...ringOffsets(outline * 0.55, 8),
   ];
 
   return (
